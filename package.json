@@ -1,0 +1,21 @@
+{
+  "main": "dist",
+  "private": true,
+  "scripts": {
+    "test": "npm run build && npm run lint",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w --preserveWatchOutput --inlineSourceMap",
+    "start": "tabris serve -a -w"
+  },
+  "dependencies": {
+    "tabris": "~3.8.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
+    "eslint-plugin-react": "^7.27.1",
+    "typescript": "~3.8.3"
+  }
+}
