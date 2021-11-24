@@ -15,7 +15,7 @@ export class App {
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false}>
             <Button bottom={50} onSelect={this.startScanner}>Scanner</Button>
-            <TextView id='TEMP1' centerX bottom={[Constraint.prev, 20]} font={{size: 24}} text='Partie scan a creer'/>
+            <TextView id='TEMP1' centerX top={[Constraint.prev, 10]} font={{size: 10}} text='Partie scan a creer'/>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
             <Button center>Lister</Button>
@@ -24,7 +24,7 @@ export class App {
         </TabFolder>
       </$>
     );
-    this.bscan.appendTo(contentView);
+    this.bscan.appendTo($(Tab).only('#SCAN'));
     this.bscan.on('detect', (e) => $(TextView).only('#TEMP1').text = 'Donnee : ' + e.data)
   }
 
