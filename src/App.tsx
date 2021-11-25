@@ -34,7 +34,9 @@ export class App {
   };
 
   private startScanner = () => {
-    this.bscan.start(['qr']);
+    if (!this.bscan.active) {
+      this.bscan.start(['qr']);
+    }
   }
 
 }
