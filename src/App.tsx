@@ -1,8 +1,8 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput} from 'tabris';
 
 export class App {
   private bscan = new esbarcodescanner.BarcodeScannerView({
-    left: 50, top: 50, right: 50, bottom: 250, id: 'BSCAN'
+    id: 'BSCAN'
   })
 
   public start() {
@@ -14,6 +14,7 @@ export class App {
             <TextView id='TEMP0' centerX bottom={[Constraint.prev, 20]} font={{size: 24}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false}>
+            <TextInput id='MARQSC' left={10} right={[Constraint.prev, 10]} height={250}/>
             <Button bottom={50} onSelect={this.startScanner}>Scanner</Button>
             <TextView id='TEMP1' centerX top={[Constraint.prev, 10]} font={{size: 10}} text='Partie scan a creer'/>
           </Tab>
@@ -24,7 +25,11 @@ export class App {
         </TabFolder>
       </$>
     );
+    this.bscan.scaleMode = 'fill';
     this.bscan.appendTo($(Tab).only('#SCAN'));
+    this.bscan.top = $(TextInput).only('#MARQSC').top;
+    this.bscan.width = $(TextInput).only('#MARQSC').width;
+    this.bscan.height = $(TextInput).only('#MARQSC').height;
     this.bscan.on('detect', (e) => $(TextView).only('#TEMP1').text = 'Donnee : ' + e.data)
   }
 
@@ -33,7 +38,7 @@ export class App {
     $(Tab).only('#SCAN').visible = true;
   };
 
-  private startScanner = () => {
+   private startScanner = () => { //initialise le scaner
     if (!this.bscan.active) {
       this.bscan.start(['qr']);
     }
