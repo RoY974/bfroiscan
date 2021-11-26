@@ -14,9 +14,9 @@ export class App {
             <TextView id='TEMP0' centerX bottom={[Constraint.prev, 20]} font={{size: 24}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false}>
-            <TextInput id='MARQSC' left={10} right={[Constraint.prev, 10]} height={250}/>
-            <Button bottom={50} onSelect={this.startScanner}>Scanner</Button>
-            <TextView id='TEMP1' centerX top={[Constraint.prev, 10]} font={{size: 10}} text='Partie scan a creer'/>
+            <TextInput id='MARQSC' left={10} right={[Constraint.prev, 10]} height={200} keyboard='number'/>
+            <Button bottom={10} onSelect={this.startScanner}>Scanner</Button>
+            <TextView id='TEMP1' centerX bottom={[Constraint.prev, 10]} font={{size: 10}} text='Partie scan a creer'/>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
             <Button center>Lister</Button>
