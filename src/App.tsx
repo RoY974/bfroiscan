@@ -21,7 +21,7 @@ export class App {
             </Row>
             <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
-              <TextInput id='COMPTE' stretchX keyboard='number' enabled={false}/>
+              <TextInput id='COMPTE' stretchX enterKeyType='done' keyboard='number'/>
               <Button id='ANNULER' enabled={false}>Annuler</Button>
             </Row>
           </Tab>
@@ -46,15 +46,19 @@ export class App {
   };
 
   private startScanner = () => { //initialise le scaner
+    $(TextInput).only('#COMPTE').focused = true;
+    $(TextInput).only('#COMPTE').keepFocus = true;
     if (!this.bscan.active) {
       this.bscan.start(['qr']);
     }
   }
 
-  private aladetection(e: MessageEvent) {
+  private aladetection(e: MessageEvent) { //quand une étiquette est lu par la caméra
     const decode = e.data.split('|');
     $(TextView).only('#CODART').text = "<b>" + decode[4] + "</b>";
     $(TextView).only('#DESART').text = decode[5];
+    $(Button).only('#ANNULER').enabled = true;
+    $(TextInput).only('#COMPTE').enabled = true;
   }
 
 }
