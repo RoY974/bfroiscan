@@ -1,4 +1,4 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row} from 'tabris';
 
 export class App {
   private bscan = new esbarcodescanner.BarcodeScannerView({
@@ -10,13 +10,16 @@ export class App {
       <$>
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil'>
-            <Button bottom={50} onSelect={this.showText}>Initialisation</Button>
+          <Button bottom={50} onSelect={this.showText}>Initialisation</Button>
             <TextView id='TEMP0' centerX bottom={[Constraint.prev, 20]} font={{size: 24}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false}>
-            <TextInput id='MARQSC' left={10} right={[Constraint.prev, 10]} height={200} keyboard='number'/>
-            <Button bottom={10} onSelect={this.startScanner}>Scanner</Button>
-            <TextView id='TEMP1' centerX bottom={[Constraint.prev, 10]} font={{size: 10}} text='Partie scan a creer'/>
+            <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} height={200} background='black'>Camera</TextView>
+            <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
+              <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
+              <TextInput id='COMPTE' stretchX keyboard='number' enabled={false}/>
+              <Button id='ANNULER' enabled={false}>Annuler</Button>
+            </Row>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
             <Button center>Lister</Button>
@@ -27,9 +30,9 @@ export class App {
     );
     this.bscan.scaleMode = 'fill';
     this.bscan.appendTo($(Tab).only('#SCAN'));
-    this.bscan.top = $(TextInput).only('#MARQSC').top;
-    this.bscan.width = $(TextInput).only('#MARQSC').width;
-    this.bscan.height = $(TextInput).only('#MARQSC').height;
+    this.bscan.top = $(TextView).only('#MARQSC').top;
+    this.bscan.width = $(TextView).only('#MARQSC').width;
+    this.bscan.height = $(TextView).only('#MARQSC').height;
     this.bscan.on('detect', (e) => this.aladetection(e))
   }
 
