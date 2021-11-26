@@ -15,6 +15,10 @@ export class App {
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false}>
             <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} height={200} background='black'>Camera</TextView>
+            <Row stretchX top={[Constraint.prev, 2]} height={20} spacing={5}>
+              <TextView id='CODART' markupEnabled font={{size: 15}}><b>CODE ARTICLE</b></TextView>
+              <TextView id='DESART' markupEnabled font={{size: 10}} stretchX>LIBELLE ARTICLE</TextView>
+            </Row>
             <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
               <TextInput id='COMPTE' stretchX keyboard='number' enabled={false}/>
@@ -48,7 +52,8 @@ export class App {
   }
 
   private aladetection(e: MessageEvent) {
-    $(TextView).only('#TEMP1').text = 'Donnee : ' + e.data;
+    console.log(e.data);
+    //$(TextView).only('#CODART').text = e.format;
   }
 
 }
