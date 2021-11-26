@@ -15,7 +15,7 @@ export class App {
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false}>
             <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} height={200} background='black'>Camera</TextView>
-            <Row stretchX top={[Constraint.prev, 2]} height={20} spacing={5}>
+            <Row stretchX top={[Constraint.prev, 2]} height={25} spacing={5}>
               <TextView id='CODART' markupEnabled font={{size: 15}}><b>CODE ARTICLE</b></TextView>
               <TextView id='DESART' markupEnabled font={{size: 10}} stretchX>LIBELLE ARTICLE</TextView>
             </Row>
@@ -52,8 +52,9 @@ export class App {
   }
 
   private aladetection(e: MessageEvent) {
-    console.log(e.data);
-    //$(TextView).only('#CODART').text = e.format;
+    const decode = e.data.split('|');
+    $(TextView).only('#CODART').text = "<b>" + decode[4] + "</b>";
+    $(TextView).only('#DESART').text = decode[5];
   }
 
 }
