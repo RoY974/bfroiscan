@@ -30,7 +30,7 @@ export class App {
     this.bscan.top = $(TextInput).only('#MARQSC').top;
     this.bscan.width = $(TextInput).only('#MARQSC').width;
     this.bscan.height = $(TextInput).only('#MARQSC').height;
-    this.bscan.on('detect', (e) => $(TextView).only('#TEMP1').text = 'Donnee : ' + e.data)
+    this.bscan.on('detect', (e) => this.aladetection(e))
   }
 
   private showText = () => {
@@ -38,10 +38,14 @@ export class App {
     $(Tab).only('#SCAN').visible = true;
   };
 
-   private startScanner = () => { //initialise le scaner
+  private startScanner = () => { //initialise le scaner
     if (!this.bscan.active) {
       this.bscan.start(['qr']);
     }
+  }
+
+  private aladetection(e: MessageEvent) {
+    $(TextView).only('#TEMP1').text = 'Donnee : ' + e.data;
   }
 
 }
