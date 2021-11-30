@@ -21,7 +21,7 @@ export class App {
             </Row>
             <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
-              <TextInput id='COMPTE' stretchX enterKeyType='done' keyboard='number'/>
+              <TextInput id='COMPTE' stretchX padding={[5,2,2,5]} font={{size: 17}} enterKeyType='done' keyboard='number' enabled={false}/>
               <Button id='ANNULER' enabled={false}>Annuler</Button>
             </Row>
           </Tab>
@@ -32,6 +32,7 @@ export class App {
         </TabFolder>
       </$>
     );
+    $(TextInput).only('#COMPTE').height = $(Button).only('#BOUSCAN').height;
     this.bscan.scaleMode = 'fill';
     this.bscan.appendTo($(Tab).only('#SCAN'));
     this.bscan.top = $(TextView).only('#MARQSC').top;
@@ -45,10 +46,12 @@ export class App {
     $(Tab).only('#SCAN').visible = true;
   };
 
-  private startScanner = () => { //initialise le scaner
+  private startScanner = () => {
+    //Prépare le champs recoltant le comptage
+    $(TextInput).only('#COMPTE').enabled = true;
     $(TextInput).only('#COMPTE').focused = true;
     $(TextInput).only('#COMPTE').keepFocus = true;
-    if (!this.bscan.active) {
+    if (!this.bscan.active) { //initialise le scaner
       this.bscan.start(['qr']);
     }
   }
