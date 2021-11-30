@@ -21,7 +21,7 @@ export class App {
             </Row>
             <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
-              <TextInput id='COMPTE' stretchX padding={[5,2,2,5]} font={{size: 17}} enterKeyType='done' keyboard='number' enabled={false}/>
+              <TextInput id='COMPTE' stretchX padding={[5,2,2,5]} font={{size: 17}} onAccept={this.validScan} enterKeyType='done' keyboard='number' enabled={false}/>
               <Button id='ANNULER' onSelect={this.annulScan} enabled={false}>Annuler</Button>
             </Row>
           </Tab>
@@ -71,6 +71,15 @@ export class App {
       $(TextView).only('#DESART').text = decode[5];
       $(Button).only('#ANNULER').enabled = true;
       $(TextInput).only('#COMPTE').enabled = true;
+    }
+  }
+
+  private validScan = () => {
+    if ($(TextInput).only('#COMPTE').text !== "") { //Ne fais rien s'il n'y a pas de chiffre d'entré
+      console.log($(TextView).only('#CODART').text + ";" + $(TextInput).only('#COMPTE').text);
+      //TODO : procédure de stockage a implémenter
+      $(TextInput).only('#COMPTE').text = "";
+      this.annulScan();
     }
   }
 
