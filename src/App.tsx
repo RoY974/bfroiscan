@@ -22,7 +22,7 @@ export class App {
             <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
               <TextInput id='COMPTE' stretchX padding={[5,2,2,5]} font={{size: 17}} enterKeyType='done' keyboard='number' enabled={false}/>
-              <Button id='ANNULER' enabled={false}>Annuler</Button>
+              <Button id='ANNULER' onSelect={this.annulScan} enabled={false}>Annuler</Button>
             </Row>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
@@ -56,12 +56,22 @@ export class App {
     }
   }
 
+  private annulScan = () => {
+    //Relance la recolte sans enregistrer le scan encours
+    $(TextView).only('#CODART').text = "<b>CODE ARTICLE</b>";
+    $(TextView).only('#DESART').text = "LIBELLE ARTICLE";
+    $(Button).only('#ANNULER').enabled = false;
+  }
+
   private aladetection(e: MessageEvent) { //quand une étiquette est lu par la caméra
     const decode = e.data.split('|');
-    $(TextView).only('#CODART').text = "<b>" + decode[4] + "</b>";
-    $(TextView).only('#DESART').text = decode[5];
-    $(Button).only('#ANNULER').enabled = true;
-    $(TextInput).only('#COMPTE').enabled = true;
+    console.log(decode[4] + " " + decode[5]);
+    if (!$(Button).only('#ANNULER').enabled) { //Evite des scans consécutif (par erreur)
+      $(TextView).only('#CODART').text = "<b>" + decode[4] + "</b>";
+      $(TextView).only('#DESART').text = decode[5];
+      $(Button).only('#ANNULER').enabled = true;
+      $(TextInput).only('#COMPTE').enabled = true;
+    }
   }
 
 }
