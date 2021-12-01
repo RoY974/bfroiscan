@@ -27,12 +27,13 @@ export class App {
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
             <ScrollView stretchX height={250} top={[Constraint.prev, 5]} direction='vertical'>
-              <TextView id='SCANLIST' top={[Constraint.prev, 5]} stretchX>TEST LIGNE</TextView>
+              <TextView id='SCANLIST' top={[Constraint.prev, 5]} stretchX>CODE ARTICLE;LIBELLE ARTICLE;QTE</TextView>
             </ScrollView>
           </Tab>
         </TabFolder>
       </$>
     );
+    $(TextView).only('#SCANLIST').text = $(TextView).only('#SCANLIST').text + "\n";
     $(TextInput).only('#COMPTE').height = $(Button).only('#BOUSCAN').height;
     this.bscan.scaleMode = 'fill';
     this.bscan.appendTo($(Tab).only('#SCAN'));
@@ -77,10 +78,19 @@ export class App {
 
   private validScan = () => { //quand l'utilisateur valide le comptage
     if ($(TextInput).only('#COMPTE').text !== "") { //Ne fais rien s'il n'y a pas de chiffre d'entré
-      console.log($(TextView).only('#CODART').text + ";" + $(TextInput).only('#COMPTE').text);
+      let result = $(TextView).only('#CODART').text;
+      //epuration du code article du gras
+      result = result.substring(3);
+      result = result.substring(0, result.length - 4);
+      //rajoute un bout de libellé
+      result = result + ";" + $(TextView).only('#DESART').text.substring(0, 20);
+      //rajoute la quantite compté
+      result = result + ";" + $(TextInput).only('#COMPTE').text;
+      console.log(result);
       if (!$(Tab).only('#CONTENU').visible) {
         $(Tab).only('#CONTENU').visible = true;
       }
+      $(TextView).only('#SCANLIST').text = $(TextView).only('#SCANLIST').text + result + "\n";
       $(TextInput).only('#COMPTE').text = "";
       this.annulScan();
     }
