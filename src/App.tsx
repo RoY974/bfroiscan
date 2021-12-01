@@ -1,4 +1,4 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView} from 'tabris';
 
 export class App {
   private bscan = new esbarcodescanner.BarcodeScannerView({
@@ -26,8 +26,9 @@ export class App {
             </Row>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
-            <Button center>Lister</Button>
-            <TextView id='TEMP2' centerX bottom={[Constraint.prev, 20]} font={{size: 24}} text='Partie liste a creer'/>
+            <ScrollView stretchX height={250} top={[Constraint.prev, 5]} direction='vertical'>
+              <TextView id='SCANLIST' top={[Constraint.prev, 5]} stretchX>TEST LIGNE</TextView>
+            </ScrollView>
           </Tab>
         </TabFolder>
       </$>
@@ -74,10 +75,12 @@ export class App {
     }
   }
 
-  private validScan = () => {
+  private validScan = () => { //quand l'utilisateur valide le comptage
     if ($(TextInput).only('#COMPTE').text !== "") { //Ne fais rien s'il n'y a pas de chiffre d'entré
       console.log($(TextView).only('#CODART').text + ";" + $(TextInput).only('#COMPTE').text);
-      //TODO : procédure de stockage a implémenter
+      if (!$(Tab).only('#CONTENU').visible) {
+        $(Tab).only('#CONTENU').visible = true;
+      }
       $(TextInput).only('#COMPTE').text = "";
       this.annulScan();
     }
