@@ -63,6 +63,7 @@ export class App {
     $(TextView).only('#CODART').text = "<b>CODE ARTICLE</b>";
     $(TextView).only('#DESART').text = "LIBELLE ARTICLE";
     $(Button).only('#ANNULER').enabled = false;
+    $(TextInput).only('#COMPTE').text = "";
   }
 
   private aladetection(e: MessageEvent) { //quand une étiquette est lu par la caméra
