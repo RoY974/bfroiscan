@@ -1,4 +1,4 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView} from 'tabris';
 
 export class App {
   private bscan = new esbarcodescanner.BarcodeScannerView({
@@ -10,6 +10,7 @@ export class App {
       <$>
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil'>
+          <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto'/>
           <Button bottom={50} onSelect={this.showText}>Initialisation</Button>
             <TextView id='TEMP0' centerX bottom={[Constraint.prev, 20]} font={{size: 24}}/>
           </Tab>
@@ -40,7 +41,7 @@ export class App {
     this.bscan.top = $(TextView).only('#MARQSC').top;
     this.bscan.width = $(TextView).only('#MARQSC').width;
     this.bscan.height = $(TextView).only('#MARQSC').height;
-    this.bscan.on('detect', (e) => this.aladetection(e))
+    this.bscan.on('detect', (e) => this.aladetection(e));
   }
 
   private showText = () => {
