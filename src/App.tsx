@@ -1,4 +1,4 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView, Composite, fs} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView, Composite, fs, AlertDialog} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
 const FICHIER = REPERTOIRE + '/scan.txt';
@@ -35,6 +35,7 @@ export class App {
             <ScrollView stretchX height={250} top={[Constraint.prev, 5]} direction='vertical'>
               <TextView id='SCANLIST' top={[Constraint.prev, 5]} stretchX>CODE ARTICLE;LIBELLE ARTICLE;QTE</TextView>
             </ScrollView>
+            <Button id='TERMINE' centerX top={[Constraint.prev, 2]} onSelect={this.goTermine}>Terminer</Button>
           </Tab>
         </TabFolder>
       </$>
@@ -127,4 +128,21 @@ export class App {
     }
   }
 
+  private async goTermine() {
+    //Une fois que l'opérateur fini son scan
+    //const confirm = demanderConfirmation();
+    const buttons = {ok: 'Confirmer', cancel: 'Annuler'};
+    const dialog = AlertDialog.open(
+      <AlertDialog title='Cloturer et envoyer' buttons={buttons}>
+        Etes vous sur de terminer la saisie et envoyer le fichier ?
+      </AlertDialog>
+    );
+    const {button} = await dialog.onClose.promise();
+    if (button === 'ok') {
+      console.log(`L'utilisateur confirme`);
+    }
+    else {
+      console.log(`Annuler et revient à la saisie`);
+    }
+  }
 }
