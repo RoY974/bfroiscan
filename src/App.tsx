@@ -1,4 +1,4 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView, Composite} from 'tabris';
 
 export class App {
   private bscan = new esbarcodescanner.BarcodeScannerView({
@@ -14,17 +14,18 @@ export class App {
           <Button bottom={50} onSelect={this.showText}>Initialisation</Button>
             <TextView id='TEMP0' centerX bottom={[Constraint.prev, 20]} font={{size: 24}}/>
           </Tab>
-          <Tab id='SCAN' title='Scanner' visible={false}>
-            <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} height={200} background='black'>Camera</TextView>
-            <Row stretchX top={[Constraint.prev, 2]} height={25} spacing={5}>
+          <Tab id='SCAN' title='Scanner' visible={false} onResize={this.scanResize}>
+            <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} background='black'>Camera</TextView>
+            <Row id='LIGA' stretchX top={[Constraint.prev, 2]} height={25} spacing={5}>
               <TextView id='CODART' markupEnabled font={{size: 15}}><b>CODE ARTICLE</b></TextView>
               <TextView id='DESART' markupEnabled font={{size: 10}} stretchX>LIBELLE ARTICLE</TextView>
             </Row>
-            <Row stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
+            <Row id='LIGB' stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
               <TextInput id='COMPTE' stretchX padding={[5,2,2,5]} font={{size: 17}} onAccept={this.validScan} enterKeyType='done' keyboard='number' enabled={false}/>
               <Button id='ANNULER' onSelect={this.annulScan} enabled={false}>Annuler</Button>
             </Row>
+            <Composite id='FAKEC' bottom={0} centerX width={20} height={70}/>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false}>
             <ScrollView stretchX height={250} top={[Constraint.prev, 5]} direction='vertical'>
@@ -37,10 +38,6 @@ export class App {
     $(TextView).only('#SCANLIST').text = $(TextView).only('#SCANLIST').text + "\n";
     $(TextInput).only('#COMPTE').height = $(Button).only('#BOUSCAN').height;
     this.bscan.scaleMode = 'fill';
-    this.bscan.appendTo($(Tab).only('#SCAN'));
-    this.bscan.top = $(TextView).only('#MARQSC').top;
-    this.bscan.width = $(TextView).only('#MARQSC').width;
-    this.bscan.height = $(TextView).only('#MARQSC').height;
     this.bscan.on('detect', (e) => this.aladetection(e));
   }
 
@@ -48,6 +45,16 @@ export class App {
     $(TextView).only('#TEMP0').text = 'Fichier a creer !';
     $(Tab).only('#SCAN').visible = true;
   };
+
+  private scanResize = () => {
+    //Principalement déclanché à l'apparission disparission du clavier
+    $(TextView).only('#MARQSC').background = 'blue';
+    $(TextView).only('#MARQSC').top = ['#SCAN', 2];
+    $(TextView).only('#MARQSC').bottom = ['#FAKEC', 2];
+    this.bscan.top = $(TextView).only('#MARQSC').top;
+    this.bscan.bottom = $(TextView).only('#MARQSC').bottom;
+    this.bscan.appendTo($(Tab).only('#SCAN'));
+  }
 
   private startScanner = () => {
     //Prépare le champs recoltant le comptage
