@@ -1,6 +1,10 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView, Composite} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView, Composite, fs} from 'tabris';
+
+const REPERTOIRE = fs.cacheDir + '/inv';
+const FICHIER = REPERTOIRE + '/scan.txt';
 
 export class App {
+
   private bscan = new esbarcodescanner.BarcodeScannerView({
     id: 'BSCAN'
   })
@@ -10,9 +14,9 @@ export class App {
       <$>
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil'>
-          <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto'/>
-          <Button bottom={50} onSelect={this.showText}>Initialisation</Button>
-            <TextView id='TEMP0' centerX bottom={[Constraint.prev, 20]} font={{size: 24}}/>
+          <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
+          <Button bottom={50} onSelect={this.fileInit}>Initialisation</Button>
+            <TextView id='INFOFIC' centerX bottom={[Constraint.prev, 20]} font={{size: 15}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false} onResize={this.scanResize}>
             <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} background='black'>Camera</TextView>
@@ -41,10 +45,28 @@ export class App {
     this.bscan.on('detect', (e) => this.aladetection(e));
   }
 
-  private showText = () => {
-    $(TextView).only('#TEMP0').text = 'Fichier a creer !';
-    $(Tab).only('#SCAN').visible = true;
-  };
+  private fileInit = () => {
+    try {
+      if (fs.isFile(FICHIER)) {
+        void fs.readFile(FICHIER, 'utf-8').catch(ex => console.error(ex)).then((ficlu) => {
+          $(TextView).only('#INFOFIC').text = 'Fichier existant : ' + ficlu + ';';
+        });
+      } else {
+        fs.writeFile(FICHIER, 'CODE ARTICLE;LIBELLE ARTICLE;QTE', 'utf-8').catch(ex => console.error(ex));
+        $(TextView).only('#INFOFIC').text = 'Fichier initialisé';
+        $(Tab).only('#SCAN').visible = true;
+      }
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
+  private wipFic = () => {
+    //Normalement a des fins de debuggage
+    void fs.removeFile(FICHIER).catch(ex => console.error(ex)).then(() => {
+      $(TextView).only('#INFOFIC').text = 'Fichier supprimé';
+    });
+  }
 
   private scanResize = () => {
     //Principalement déclanché à l'apparission disparission du clavier
