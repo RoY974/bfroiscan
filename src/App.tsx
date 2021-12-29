@@ -152,6 +152,10 @@ export class App {
       $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: vart, ilib: vlib, iqte: vqte})
       $(TextInput).only('#COMPTE').text = "";
       this.annulScan();
+      if ((items.length % 2) === 0) {
+        //Sauvegarde la liste tous les 2 scan
+        goSave();
+      }
     }
   }
 
