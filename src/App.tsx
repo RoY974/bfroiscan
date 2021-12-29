@@ -1,7 +1,13 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, ScrollView, ImageView, Composite, fs, AlertDialog} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row} from 'tabris';
+import {ImageView, Composite, fs, AlertDialog, CollectionView} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
 const FICHIER = REPERTOIRE + '/scan.txt';
+
+const items = [
+  {icoda: 'CODE ART', ilib: 'LIBELLE', iqte: 'QUANTITE'},
+  {icoda: 'CU245875', ilib: 'Test de libellé avec un peu de caractère', iqte: '15'}
+];
 
 export class App {
 
@@ -31,16 +37,14 @@ export class App {
             </Row>
             <Composite id='FAKEC' bottom={0} centerX width={20} height={70}/>
           </Tab>
-          <Tab id='CONTENU' title='Contenu' visible={false}>
-            <ScrollView stretchX height={250} top={[Constraint.prev, 5]} direction='vertical'>
-              <TextView id='SCANLIST' top={[Constraint.prev, 5]} stretchX>CODE ARTICLE;LIBELLE ARTICLE;QTE</TextView>
-            </ScrollView>
+          <Tab id='CONTENU' title='Contenu'>
+            <CollectionView id='SCANLIST' stretch cellHeight={64} itemCount={2} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
             <Button id='TERMINE' centerX top={[Constraint.prev, 2]} onSelect={this.goTermine}>Terminer</Button>
           </Tab>
         </TabFolder>
       </$>
     );
-    $(TextView).only('#SCANLIST').text = $(TextView).only('#SCANLIST').text + "\n";
+    //$(CollectionView).only('#SCANLIST').updateCell();
     $(TextInput).only('#COMPTE').height = $(Button).only('#BOUSCAN').height;
     this.bscan.scaleMode = 'fill';
     this.bscan.on('detect', (e) => this.aladetection(e));
@@ -145,4 +149,30 @@ export class App {
       console.log(`Annuler et revient à la saisie`);
     }
   }
+
+  private SLcreateCell = () => {
+    return (
+      <Composite background='gray'>
+        <Composite id='container' stretch background='white'>
+          <TextView id='lscodeart' left={16} top={8} font='medium 16px'>codeart</TextView>
+          <TextView id='lslibart' left={16} bottom={8}>libart</TextView>
+          <TextView id='lsqteart' right={16} top={8} font='medium 16px'>qteart</TextView>
+        </Composite>
+        <Composite stretchX height={1} background='#eeeeee'/>
+      </Composite>
+    );
+  }
+}
+
+function SLupdateCell(view: Composite, index: number) {
+  const item = items[index];
+  console.log("l'index est : " + index.toString());
+  console.log("l'item est : " + item.ilib);
+  const container = view.find('#container').only();
+  console.log("test : " + view.find('#container').only().cid);
+  //container.item = item;
+  container.transform = {translationX: 0};
+  view.find(TextView).only('#lscodeart').text = item.icoda;
+  view.find(TextView).only('#lslibart').text = item.ilib;
+  view.find(TextView).only('#lsqteart').text = item.iqte;
 }
