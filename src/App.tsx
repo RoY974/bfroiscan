@@ -142,6 +142,7 @@ export class App {
     const {button} = await dialog.onClose.promise();
     if (button === 'ok') {
       console.log(`L'utilisateur confirme`);
+      goSave();
     }
     else {
       console.log(`Annuler et revient à la saisie`);
@@ -161,6 +162,15 @@ export class App {
       </Composite>
     );
   }
+}
+
+function goSave() {
+  //Fonction qui sauvegarde les scans dans le fichier
+  let contenu = '';
+  items.forEach((value) => {
+    contenu = contenu + value.icoda + ';' + value.ilib + ';' + value.iqte + '\n';
+  })
+  fs.writeFile(FICHIER, contenu, 'utf-8').catch(ex => console.error(ex));
 }
 
 function SLupdateCell(view: Composite, index: number) {
