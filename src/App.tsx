@@ -44,7 +44,6 @@ export class App {
         </TabFolder>
       </$>
     );
-    //$(CollectionView).only('#SCANLIST').updateCell();
     $(TextInput).only('#COMPTE').height = $(Button).only('#BOUSCAN').height;
     this.bscan.scaleMode = 'fill';
     this.bscan.on('detect', (e) => this.aladetection(e));
@@ -134,7 +133,6 @@ export class App {
 
   private async goTermine() {
     //Une fois que l'opérateur fini son scan
-    //const confirm = demanderConfirmation();
     const buttons = {ok: 'Confirmer', cancel: 'Annuler'};
     const dialog = AlertDialog.open(
       <AlertDialog title='Cloturer et envoyer' buttons={buttons}>
@@ -151,6 +149,7 @@ export class App {
   }
 
   private SLcreateCell = () => {
+    //Methode qui met en forme l'ajout d'une ligne de la CollectionView
     return (
       <Composite background='gray'>
         <Composite id='container' stretch background='white'>
@@ -165,12 +164,9 @@ export class App {
 }
 
 function SLupdateCell(view: Composite, index: number) {
+  //Fonction qui met à jour la ligne de scan avec le contenu scanné
   const item = items[index];
-  console.log("l'index est : " + index.toString());
-  console.log("l'item est : " + item.ilib);
   const container = view.find('#container').only();
-  console.log("test : " + view.find('#container').only().cid);
-  //container.item = item;
   container.transform = {translationX: 0};
   view.find(TextView).only('#lscodeart').text = item.icoda;
   view.find(TextView).only('#lslibart').text = item.ilib;
