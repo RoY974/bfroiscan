@@ -54,6 +54,7 @@ export class App {
       if (fs.isFile(FICHIER)) {
         void fs.readFile(FICHIER, 'utf-8').catch(ex => console.error(ex)).then((ficlu) => {
           $(TextView).only('#INFOFIC').text = 'Fichier existant : ' + ficlu + ';';
+          this.recupfichier(ficlu).catch(ex => console.error(ex));
         });
       } else {
         fs.writeFile(FICHIER, 'CODE ARTICLE;LIBELLE ARTICLE;QTE', 'utf-8').catch(ex => console.error(ex));
@@ -62,6 +63,29 @@ export class App {
       }
     } catch (ex) {
       console.error(ex);
+    }
+  }
+
+  private async recupfichier(ficlu: string | void) {
+    //Si un fichier existe à l'initialisation, suppose que le tel a planté et propose de le reprendre
+    const buttons = {ok: 'Oui', cancel: 'Non'};
+    const dialog = AlertDialog.open(
+      <AlertDialog title='Recupérer fichier' buttons={buttons}>
+        Un fichier précédent existe et a été détecté, voulez vous le reprendre ?
+      </AlertDialog>
+    );
+    const {button} = await dialog.onClose.promise();
+    if (button === 'ok') {
+      if (typeof ficlu === 'string') {
+        const ficluT = ficlu.split('\n');
+        for (let i = 0; i < ficluT.length; i++) {
+          const ligT = ficluT[i].split(';');
+          $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: ligT[0], ilib: ligT[1], iqte: ligT[2]});
+        }
+      }
+    }
+    else {
+      console.log(`Annuler`);
     }
   }
 
