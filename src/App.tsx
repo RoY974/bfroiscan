@@ -1,8 +1,9 @@
 import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, Widget} from 'tabris';
-import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent} from 'tabris';
+import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent, app} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
-const FICHIER = REPERTOIRE + '/scan.txt';
+const NOMFIC = 'scan.txt';
+const FICHIER = REPERTOIRE + '/' + NOMFIC;
 
 const items = [
   {icoda: 'CODE ART', ilib: 'LIBELLE', iqte: 'QUANTITE'},
@@ -161,6 +162,7 @@ export class App {
 
   private async goTermine() {
     //Une fois que l'opérateur fini son scan
+    goSave();
     const buttons = {ok: 'Confirmer', cancel: 'Annuler'};
     const dialog = AlertDialog.open(
       <AlertDialog title='Cloturer et envoyer' buttons={buttons}>
@@ -170,7 +172,10 @@ export class App {
     const {button} = await dialog.onClose.promise();
     if (button === 'ok') {
       console.log(`L'utilisateur confirme`);
-      goSave();
+      void fs.readFile(FICHIER, 'utf-8').then(data => {
+        const file = new File([data], NOMFIC, { type: 'text/csv' });
+        app.share({title: 'scan terminé', text: 'Voir PJ', files: [file]}).catch(ex => console.error(ex));
+      }).catch(ex => console.error(ex));
     }
     else {
       console.log(`Annuler et revient à la saisie`);
