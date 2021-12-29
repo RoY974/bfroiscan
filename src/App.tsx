@@ -38,7 +38,7 @@ export class App {
             <Composite id='FAKEC' bottom={0} centerX width={20} height={70}/>
           </Tab>
           <Tab id='CONTENU' title='Contenu'>
-            <CollectionView id='SCANLIST' stretch cellHeight={64} itemCount={2} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
+            <CollectionView id='SCANLIST' stretchX top={2} bottom={50} cellHeight={64} itemCount={2} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
             <Button id='TERMINE' centerX top={[Constraint.prev, 2]} onSelect={this.goTermine}>Terminer</Button>
           </Tab>
         </TabFolder>
