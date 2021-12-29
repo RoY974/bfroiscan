@@ -6,7 +6,7 @@ const FICHIER = REPERTOIRE + '/scan.txt';
 
 const items = [
   {icoda: 'CODE ART', ilib: 'LIBELLE', iqte: 'QUANTITE'},
-  {icoda: 'CU245875', ilib: 'Test de libellé avec un peu de caractère', iqte: '15'}
+  {icoda: 'CU245875', ilib: 'TEST LONGUEUR LIBELLE12345678912345', iqte: '15'}
 ];
 
 export class App {
@@ -114,19 +114,19 @@ export class App {
 
   private validScan = () => { //quand l'utilisateur valide le comptage
     if ($(TextInput).only('#COMPTE').text !== "") { //Ne fais rien s'il n'y a pas de chiffre d'entré
-      let result = $(TextView).only('#CODART').text;
+      let vart = $(TextView).only('#CODART').text;
       //epuration du code article du gras
-      result = result.substring(3);
-      result = result.substring(0, result.length - 4);
+      vart = vart.substring(3);
+      vart = vart.substring(0, vart.length - 4);
       //rajoute un bout de libellé
-      result = result + ";" + $(TextView).only('#DESART').text.substring(0, 20);
+      const vlib = $(TextView).only('#DESART').text.substring(0, 35);
       //rajoute la quantite compté
-      result = result + ";" + $(TextInput).only('#COMPTE').text;
-      console.log(result);
+      const vqte = $(TextInput).only('#COMPTE').text;
+      console.log(vart + ";" + vlib + ";" + vqte);
       if (!$(Tab).only('#CONTENU').visible) {
         $(Tab).only('#CONTENU').visible = true;
       }
-      $(TextView).only('#SCANLIST').text = $(TextView).only('#SCANLIST').text + result + "\n";
+      $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: vart, ilib: vlib, iqte: vqte})
       $(TextInput).only('#COMPTE').text = "";
       this.annulScan();
     }
