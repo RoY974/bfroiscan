@@ -7,7 +7,6 @@ const FICHIER = REPERTOIRE + '/' + NOMFIC;
 
 const items = [
   {icoda: 'CODE ART', ilib: 'LIBELLE', iqte: 'QUANTITE'},
-  {icoda: 'CU245875', ilib: 'TEST LONGUEUR LIBELLE12345678912345', iqte: '15'}
 ];
 
 export class App {
@@ -22,7 +21,7 @@ export class App {
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil'>
           <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
-          <Button bottom={50} onSelect={this.fileInit}>Initialisation</Button>
+          <Button id='BINIT' bottom={50} onSelect={this.fileInit}>Initialisation</Button>
             <TextView id='INFOFIC' centerX bottom={[Constraint.prev, 20]} font={{size: 15}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false} onResize={this.scanResize}>
@@ -38,7 +37,7 @@ export class App {
             </Row>
             <Composite id='FAKEC' bottom={0} centerX width={20} height={70}/>
           </Tab>
-          <Tab id='CONTENU' title='Contenu'>
+          <Tab id='CONTENU' title='Contenu' visible={false}>
             <CollectionView id='SCANLIST' stretchX top={2} bottom={50} cellHeight={64} itemCount={2} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
             <Button id='TERMINE' centerX top={[Constraint.prev, 2]} onSelect={this.goTermine}>Terminer</Button>
           </Tab>
@@ -54,13 +53,14 @@ export class App {
     try {
       if (fs.isFile(FICHIER)) {
         void fs.readFile(FICHIER, 'utf-8').catch(ex => console.error(ex)).then((ficlu) => {
-          $(TextView).only('#INFOFIC').text = 'Fichier existant : ' + ficlu + ';';
+          $(TextView).only('#INFOFIC').text = 'Fichier existant';
           this.recupfichier(ficlu).catch(ex => console.error(ex));
         });
       } else {
         fs.writeFile(FICHIER, 'CODE ARTICLE;LIBELLE ARTICLE;QTE', 'utf-8').catch(ex => console.error(ex));
         $(TextView).only('#INFOFIC').text = 'Fichier initialisé';
         $(Tab).only('#SCAN').visible = true;
+        $(Button).only('#BINIT').enabled = false;
       }
     } catch (ex) {
       console.error(ex);
@@ -84,6 +84,9 @@ export class App {
           $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: ligT[0], ilib: ligT[1], iqte: ligT[2]});
         }
       }
+      $(Tab).only('#SCAN').visible = true;
+      $(Tab).only('#CONTENU').visible = true;
+      $(Button).only('#BINIT').enabled = false;
     }
     else {
       console.log(`Annuler`);
