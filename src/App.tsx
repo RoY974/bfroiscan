@@ -1,5 +1,5 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row} from 'tabris';
-import {ImageView, Composite, fs, AlertDialog, CollectionView} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, Widget} from 'tabris';
+import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
 const FICHIER = REPERTOIRE + '/scan.txt';
@@ -152,7 +152,7 @@ export class App {
     //Methode qui met en forme l'ajout d'une ligne de la CollectionView
     return (
       <Composite background='gray'>
-        <Composite id='container' stretch background='white'>
+        <Composite id='container' stretch background='white' onPanHorizontal={handlePan}>
           <TextView id='lscodeart' left={16} top={8} font='medium 16px'>codeart</TextView>
           <TextView id='lslibart' left={16} bottom={8}>libart</TextView>
           <TextView id='lsqteart' right={16} top={8} font='medium 16px'>qteart</TextView>
@@ -167,8 +167,53 @@ function SLupdateCell(view: Composite, index: number) {
   //Fonction qui met à jour la ligne de scan avec le contenu scanné
   const item = items[index];
   const container = view.find('#container').only();
+  container.data = item;
   container.transform = {translationX: 0};
   view.find(TextView).only('#lscodeart').text = item.icoda;
   view.find(TextView).only('#lslibart').text = item.ilib;
   view.find(TextView).only('#lsqteart').text = item.iqte;
 }
+
+//////////// Bloque de code qui gère l'animation de swip pour supprimer un scan
+async function handlePan(event: WidgetPanEvent<Composite>) {
+  const {target, state, translationX} = event;
+  target.transform = {translationX};
+  if (state === 'end') {
+    await handlePanFinished(event);
+  }
+}
+
+async function handlePanFinished({target, velocityX, translationX}: WidgetPanEvent<Composite>) {
+  const beyondCenter = Math.abs(translationX) > target.bounds.width / 2;
+  const fling = Math.abs(velocityX) > 200;
+  const sameDirection = direction(velocityX) === direction(translationX);
+  // When swiped beyond the center, trigger dismiss if flinged in the same direction or let go.
+  // Otherwise, detect a dismiss only if flinged in the same direction.
+  const dismiss = beyondCenter ? (sameDirection || !fling) : (sameDirection && fling);
+  if (dismiss) {
+    await animateDismiss(target, translationX);
+  } else {
+    await animateCancel(target);
+  }
+}
+
+async function animateDismiss(target: Composite<Widget>, translationX: number) {
+  await target.animate({
+    transform: {translationX: direction(translationX) * target.bounds.width}
+  }, {
+    duration: 200,
+    easing: 'ease-out'
+  });
+  const index = items.indexOf(target.data);
+  items.splice(index, 1);
+  $(CollectionView).only().remove(index);
+}
+
+async function animateCancel(target: Composite<Widget>) {
+  return target.animate({transform: {translationX: 0}}, {duration: 200, easing: 'ease-out'});
+}
+
+function direction(offset: number) {
+  return offset ? offset < 0 ? -1 : 1 : 0;
+}
+///////////////Fin de bloque du code
