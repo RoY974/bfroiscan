@@ -2,7 +2,7 @@ import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Ro
 import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent, app} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
-const NOMFIC = 'scan.txt';
+const NOMFIC = 'scan.csv';
 const FICHIER = REPERTOIRE + '/' + NOMFIC;
 
 const items = [
