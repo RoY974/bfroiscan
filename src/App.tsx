@@ -145,21 +145,23 @@ export class App {
       //epuration du code article du gras
       vart = vart.substring(3);
       vart = vart.substring(0, vart.length - 4);
-      //rajoute un bout de libellé
-      const vlib = $(TextView).only('#DESART').text.substring(0, 35);
-      //rajoute la quantite compté
-      const vqte = $(TextInput).only('#COMPTE').text;
-      console.log(vart + ";" + vlib + ";" + vqte);
-      if (!$(Tab).only('#CONTENU').visible) {
-        $(Tab).only('#CONTENU').visible = true;
-      }
-      $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: vart, ilib: vlib, iqte: vqte})
-      $(TextInput).only('#COMPTE').text = "";
-      this.annulScan();
-      if ((items.length % 2) === 0) {
-        //Sauvegarde la liste tous les 2 scan
-        goSave();
-      }
+      if (vart !== 'CODE ARTICLE') { //Ne fais rien si le scan n'a rien trouvé
+        //rajoute un bout de libellé
+        const vlib = $(TextView).only('#DESART').text.substring(0, 35);
+        //rajoute la quantite compté
+        const vqte = $(TextInput).only('#COMPTE').text;
+        console.log(vart + ";" + vlib + ";" + vqte);
+        if (!$(Tab).only('#CONTENU').visible) {
+          $(Tab).only('#CONTENU').visible = true;
+        }
+        $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: vart, ilib: vlib, iqte: vqte})
+        $(TextInput).only('#COMPTE').text = "";
+        this.annulScan();
+        if ((items.length % 2) === 0) {
+          //Sauvegarde la liste tous les 2 scan
+          goSave();
+        }
+      } 
     }
   }
 
