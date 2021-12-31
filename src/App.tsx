@@ -20,8 +20,11 @@ export class App {
       <$>
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil'>
-          <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
-          <Button id='BINIT' bottom={50} onSelect={this.fileInit}>Initialisation</Button>
+            <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
+            <Row id='LIG0' centerX bottom={50} spacing={10}>
+              <Button id='BINIT' onSelect={this.fileInit}>Initialisation</Button>
+              <Button id='RAZ' enabled={false} onSelect={this.rasedfichier}>Remise a zéro</Button>
+            </Row>
             <TextView id='INFOFIC' centerX bottom={[Constraint.prev, 20]} font={{size: 15}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false} onResize={this.scanResize}>
@@ -66,6 +69,11 @@ export class App {
     } catch (ex) {
       console.error(ex);
     }
+  }
+
+  private async rasedfichier() {
+    //Efface le fichier et réinitialise le contenu pour une prochaine série de scan
+
   }
 
   private async recupfichier(ficlu: string | void) {
