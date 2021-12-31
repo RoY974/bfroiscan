@@ -96,7 +96,11 @@ export class App {
         const ficluT = ficlu.split('\n');
         for (let i = 0; i < ficluT.length; i++) {
           const ligT = ficluT[i].split(';');
-          $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: ligT[0], ilib: ligT[1], iqte: ligT[2]});
+          if (ligT[0] !== 'CODE ART') {
+            if (ligT[0] !== '') {
+              $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: ligT[0], ilib: ligT[1], iqte: ligT[2]});
+            }
+          }
         }
       }
       $(Tab).only('#SCAN').visible = true;
