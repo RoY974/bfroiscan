@@ -1,4 +1,4 @@
-import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, Widget} from 'tabris';
+import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, Widget, EventObject} from 'tabris';
 import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent, app} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
@@ -19,7 +19,7 @@ export class App {
     contentView.append(
       <$>
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
-          <Tab id='ACCUEIL' title='Accueil'>
+          <Tab id='ACCUEIL' title='Accueil' onSelect={ev => this.tabScanHide(ev)}>
             <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
             <Row id='LIG0' centerX bottom={50} spacing={10}>
               <Button id='BINIT' onSelect={this.fileInit}>Initialisation</Button>
@@ -41,7 +41,7 @@ export class App {
             </Row>
             <Composite id='FAKEC' bottom={0} centerX width={20} height={70}/>
           </Tab>
-          <Tab id='CONTENU' title='Contenu' visible={false}>
+          <Tab id='CONTENU' title='Contenu' visible={false} onSelect={ev => this.tabScanHide(ev)}>
             <CollectionView id='SCANLIST' stretchX top={2} bottom={50} cellHeight={64} itemCount={2} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
             <Button id='TERMINE' centerX top={[Constraint.prev, 2]} onSelect={this.goTermine}>Terminer</Button>
           </Tab>
@@ -124,6 +124,13 @@ export class App {
     this.bscan.top = $(TextView).only('#MARQSC').top;
     this.bscan.bottom = $(TextView).only('#MARQSC').bottom;
     this.bscan.appendTo($(Tab).only('#SCAN'));
+  }
+
+  private tabScanHide(ev: EventObject<Widget>) {
+    if (ev.target.id === 'CONTENU') {
+      $(CollectionView).only('#SCANLIST').reveal(-1);
+    }
+    this.bscan.stop();
   }
 
   private startScanner = () => {
