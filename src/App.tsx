@@ -73,7 +73,13 @@ export class App {
 
   private async rasedfichier() {
     //Efface le fichier et réinitialise le contenu pour une prochaine série de scan
-
+    void fs.removeFile(FICHIER).catch(ex => console.error(ex));
+    //purge la liste d'item jusqu'à l'entête
+    items.splice(1,items.length - 1);
+    $(CollectionView).only('#SCANLIST').itemCount = items.length;
+    $(Button).only('#BINIT').enabled = true;
+    $(Button).only('#RAZ').enabled = false;
+    $(TextView).only('#INFOFIC').text = 'Réinitialisation terminé';
   }
 
   private async recupfichier(ficlu: string | void) {
@@ -96,6 +102,7 @@ export class App {
       $(Tab).only('#SCAN').visible = true;
       $(Tab).only('#CONTENU').visible = true;
       $(Button).only('#BINIT').enabled = false;
+      $(Button).only('#RAZ').enabled = true;
     }
     else {
       console.log(`Annuler`);
@@ -170,7 +177,10 @@ export class App {
           //Sauvegarde la liste tous les 2 scan
           goSave();
         }
-      } 
+        if (!$(Button).only('#RAZ').enabled) {
+          $(Button).only('#RAZ').enabled = true;
+        }
+      }
     }
   }
 
