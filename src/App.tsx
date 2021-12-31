@@ -276,7 +276,8 @@ function SLupdateCell(view: Composite, index: number) {
   view.find(TextView).only('#lsqteart').text = item.iqte;
 }
 
-//////////// Bloque de code qui gère l'animation de swip pour supprimer un scan
+
+//#region code qui gère l'animation de swip pour supprimer un scan
 async function handlePan(event: WidgetPanEvent<Composite>) {
   const {target, state, translationX} = event;
   target.transform = {translationX};
@@ -318,4 +319,5 @@ async function animateCancel(target: Composite<Widget>) {
 function direction(offset: number) {
   return offset ? offset < 0 ? -1 : 1 : 0;
 }
-///////////////Fin de bloque du code
+//#endregion
+
