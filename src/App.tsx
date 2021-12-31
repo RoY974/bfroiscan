@@ -29,6 +29,7 @@ export class App {
             <Row id='LIGA' stretchX top={[Constraint.prev, 2]} height={25} spacing={5}>
               <TextView id='CODART' markupEnabled font={{size: 15}}><b>CODE ARTICLE</b></TextView>
               <TextView id='DESART' markupEnabled font={{size: 10}} stretchX>LIBELLE ARTICLE</TextView>
+              <Button id='ENTMANU' width={30} font={{size: 10}} onSelect={this.Entreemanu}>+</Button>
             </Row>
             <Row id='LIGB' stretchX top={[Constraint.prev, 2]} height={45} spacing={10}>
               <Button id='BOUSCAN' onSelect={this.startScanner}>Scanner</Button>
@@ -163,6 +164,30 @@ export class App {
         }
       } 
     }
+  }
+
+  private async Entreemanu() {
+    const buttons = {ok: 'Modifier', cancel: 'Fermer'};
+    const dialog = AlertDialog.open(
+      <AlertDialog title='Entrée manuelle' buttons={buttons}>
+        Entrer manuellement le code et un descriptif
+        <TextInput message='Code article'/>
+        <TextInput message='Libellé'/>
+      </AlertDialog>
+    );
+    let entreesmanu: string[];
+    let button: string;
+    await dialog.onClose.promise().then((e) => {
+      entreesmanu = e.texts;
+      button = e.button;
+      if (button === 'ok') {
+        $(TextView).only('#CODART').text = "<b>" + entreesmanu[0] + "</b>";
+        $(TextView).only('#DESART').text = entreesmanu[1];
+      }
+      else {
+        console.log(`Annuler et revient au scan`);
+      }
+    });
   }
 
   private async goTermine() {
