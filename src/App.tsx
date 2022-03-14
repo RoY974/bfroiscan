@@ -1,5 +1,5 @@
 import {Button, TextView, contentView, Tab, TabFolder, Constraint, TextInput, Row, Widget, EventObject} from 'tabris';
-import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent, app} from 'tabris';
+import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent, app, Picker} from 'tabris';
 
 const REPERTOIRE = fs.cacheDir + '/inv';
 const NOMFIC = 'scan.csv';
@@ -10,6 +10,8 @@ let CDAFFAIRE = 'NON PRECISE';
 const items = [
   {icoda: 'CODE ART', ilib: 'LIBELLE', iqte: 'QUANTITE'},
 ];
+
+const modefc = ['Normal', 'Inventaire'];
 
 export class App {
 
@@ -23,10 +25,13 @@ export class App {
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil' onSelect={ev => this.tabScanHide(ev)}>
             <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
-            <Row id='LIG1' centerX bottom={135} spacing={10}>
+            <Row id='LIG1' centerX bottom={195} spacing={10}>
+              <Picker id='MODEFC' width={200} style='fill' message='Mode' itemCount={modefc.length} itemText={index => modefc[index]} selectionIndex={0}/>
+            </Row>
+            <Row id='LIG2' centerX bottom={135} spacing={10}>
               <TextInput id='CODDEPOT' width={200} style='fill' floatMessage={true} message='Code dépot' maxChars={2} autoCapitalize='all'/>
             </Row>
-            <Row id='LIG2' centerX bottom={75} spacing={10}>
+            <Row id='LIG3' centerX bottom={75} spacing={10}>
               <TextInput id='CODAFFAIRE' width={200} style='fill' floatMessage={true} message='Code affaire' maxChars={20} autoCapitalize='all'/>
             </Row>
             <Row id='LIG0' centerX bottom={5} spacing={10}>
@@ -264,8 +269,8 @@ export class App {
     if (button === 'ok') {
       console.log(`L'utilisateur confirme`);
       void fs.readFile(FICHIER, 'utf-8').then(data => {
-        const file = new File([data], NOMFIC, { type: 'text/csv' });
-        app.share({title: 'scan terminé', text: 'Voir PJ', files: [file]}).catch(ex => console.error(ex));
+        const file = new File([data], CDDEPOT + CDAFFAIRE + '.csv', { type: 'text/csv' });
+        app.share({title: 'scan terminé', text: 'CODE DEPOT : ' + CDDEPOT + ' ; CODE AFFAIRE : ' + CDAFFAIRE, files: [file]}).catch(ex => console.error(ex));
       }).catch(ex => console.error(ex));
     }
     else {
