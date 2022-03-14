@@ -21,7 +21,13 @@ export class App {
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil' onSelect={ev => this.tabScanHide(ev)}>
             <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
-            <Row id='LIG0' centerX bottom={50} spacing={10}>
+            <Row id='LIG1' centerX bottom={120} spacing={10}>
+              <TextInput id='DEPOT' width={200} style='fill' floatMessage={true} message='Code dépot' maxChars={2} autoCapitalize='all'/>
+            </Row>
+            <Row id='LIG2' centerX bottom={60} spacing={10}>
+              <TextInput id='CODAFFAIRE' width={200} style='fill' floatMessage={true} message='Code affaire' maxChars={20} autoCapitalize='all'/>
+            </Row>
+            <Row id='LIG0' centerX bottom={5} spacing={10}>
               <Button id='BINIT' onSelect={this.fileInit}>Initialisation</Button>
               <Button id='RAZ' enabled={false} onSelect={this.rasedfichier}>Remise a zéro</Button>
             </Row>
