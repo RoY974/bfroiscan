@@ -4,6 +4,8 @@ import {ImageView, Composite, fs, AlertDialog, CollectionView, WidgetPanEvent, a
 const REPERTOIRE = fs.cacheDir + '/inv';
 const NOMFIC = 'scan.csv';
 const FICHIER = REPERTOIRE + '/' + NOMFIC;
+let CDDEPOT = 'XX';
+let CDAFFAIRE = 'NON PRECISE';
 
 const items = [
   {icoda: 'CODE ART', ilib: 'LIBELLE', iqte: 'QUANTITE'},
@@ -22,7 +24,7 @@ export class App {
           <Tab id='ACCUEIL' title='Accueil' onSelect={ev => this.tabScanHide(ev)}>
             <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
             <Row id='LIG1' centerX bottom={120} spacing={10}>
-              <TextInput id='DEPOT' width={200} style='fill' floatMessage={true} message='Code dépot' maxChars={2} autoCapitalize='all'/>
+              <TextInput id='CODDEPOT' width={200} style='fill' floatMessage={true} message='Code dépot' maxChars={2} autoCapitalize='all'/>
             </Row>
             <Row id='LIG2' centerX bottom={60} spacing={10}>
               <TextInput id='CODAFFAIRE' width={200} style='fill' floatMessage={true} message='Code affaire' maxChars={20} autoCapitalize='all'/>
@@ -60,20 +62,41 @@ export class App {
   }
 
   private fileInit = () => {
-    try {
-      if (fs.isFile(FICHIER)) {
-        void fs.readFile(FICHIER, 'utf-8').catch(ex => console.error(ex)).then((ficlu) => {
-          $(TextView).only('#INFOFIC').text = 'Fichier existant';
-          this.recupfichier(ficlu).catch(ex => console.error(ex));
-        });
-      } else {
-        fs.writeFile(FICHIER, 'CODE ARTICLE;LIBELLE ARTICLE;QTE', 'utf-8').catch(ex => console.error(ex));
-        $(TextView).only('#INFOFIC').text = 'Fichier initialisé';
-        $(Tab).only('#SCAN').visible = true;
-        $(Button).only('#BINIT').enabled = false;
+    let validation = true;
+    if ($(TextInput).only('#CODDEPOT').text === '') {
+      validation = false;
+      new AlertDialog({
+        title: 'Le code depot doit être renseigné',
+        buttons: {ok: 'OK'}
+      }).open();
+    }
+    if ($(TextInput).only('#CODAFFAIRE').text === '') {
+      validation = false;
+      new AlertDialog({
+        title: 'Le code affaire doit être renseigné',
+        buttons: {ok: 'OK'}
+      }).open();
+    }
+    
+    if (validation) {
+      try {
+        if (fs.isFile(FICHIER)) {
+          void fs.readFile(FICHIER, 'utf-8').catch(ex => console.error(ex)).then((ficlu) => {
+            $(TextView).only('#INFOFIC').text = 'Fichier existant';
+            this.recupfichier(ficlu).catch(ex => console.error(ex));
+          });
+        } else {
+          CDDEPOT = $(TextInput).only('#CODDEPOT').text;
+          CDAFFAIRE = $(TextInput).only('#CODAFFAIRE').text;
+          fs.writeFile(FICHIER, CDDEPOT + ';' + CDAFFAIRE + ';QTE', 'utf-8').catch(ex => console.error(ex));
+          $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: CDAFFAIRE, ilib: 'INITIALISE', iqte: CDDEPOT});
+          $(TextView).only('#INFOFIC').text = 'Fichier initialisé';
+          $(Tab).only('#SCAN').visible = true;
+          $(Button).only('#BINIT').enabled = false;
+        }
+      } catch (ex) {
+        console.error(ex);
       }
-    } catch (ex) {
-      console.error(ex);
     }
   }
 
