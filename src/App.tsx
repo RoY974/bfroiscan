@@ -50,7 +50,7 @@ export class App {
             <Composite id='FAKEC' bottom={0} centerX width={20} height={70}/>
           </Tab>
           <Tab id='CONTENU' title='Contenu' visible={false} onSelect={ev => this.tabScanHide(ev)}>
-            <CollectionView id='SCANLIST' stretchX top={2} bottom={50} cellHeight={64} itemCount={2} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
+            <CollectionView id='SCANLIST' stretchX top={2} bottom={50} cellHeight={64} itemCount={1} createCell={this.SLcreateCell} updateCell={SLupdateCell}/>
             <Button id='TERMINE' centerX top={[Constraint.prev, 2]} onSelect={this.goTermine}>Terminer</Button>
           </Tab>
         </TabFolder>
@@ -79,6 +79,9 @@ export class App {
     }
     
     if (validation) {
+      //Enleve l'entete préconstruite par tabris de la collectionview
+      items.shift();
+      $(CollectionView).only('#SCANLIST').remove(0);
       try {
         if (fs.isFile(FICHIER)) {
           void fs.readFile(FICHIER, 'utf-8').catch(ex => console.error(ex)).then((ficlu) => {
@@ -291,6 +294,7 @@ function goSave() {
   items.forEach((value) => {
     contenu = contenu + value.icoda + ';' + value.ilib + ';' + value.iqte + '\n';
   })
+  console.log(contenu); //pour debuggage uniquement
   fs.writeFile(FICHIER, contenu, 'utf-8').catch(ex => console.error(ex));
 }
 
