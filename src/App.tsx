@@ -23,17 +23,17 @@ export class App {
         <TabFolder paging stretch selectionIndex={0} tabBarLocation='bottom'>
           <Tab id='ACCUEIL' title='Accueil' onSelect={ev => this.tabScanHide(ev)}>
             <ImageView id='LOGO' centerX image='resources/logo.png' height={180} scaleMode='auto' onSwipeUp={this.wipFic}/>
-            <Row id='LIG1' centerX bottom={120} spacing={10}>
+            <Row id='LIG1' centerX bottom={135} spacing={10}>
               <TextInput id='CODDEPOT' width={200} style='fill' floatMessage={true} message='Code dépot' maxChars={2} autoCapitalize='all'/>
             </Row>
-            <Row id='LIG2' centerX bottom={60} spacing={10}>
+            <Row id='LIG2' centerX bottom={75} spacing={10}>
               <TextInput id='CODAFFAIRE' width={200} style='fill' floatMessage={true} message='Code affaire' maxChars={20} autoCapitalize='all'/>
             </Row>
             <Row id='LIG0' centerX bottom={5} spacing={10}>
               <Button id='BINIT' onSelect={this.fileInit}>Initialisation</Button>
               <Button id='RAZ' enabled={false} onSelect={this.rasedfichier}>Remise a zéro</Button>
             </Row>
-            <TextView id='INFOFIC' centerX bottom={[Constraint.prev, 20]} font={{size: 15}}/>
+            <TextView id='INFOFIC' centerX bottom={[Constraint.prev, 2]} font={{size: 15}}/>
           </Tab>
           <Tab id='SCAN' title='Scanner' visible={false} onResize={this.scanResize}>
             <TextView id='MARQSC' left={10} right={[Constraint.prev, 10]} background='black'>Camera</TextView>
