@@ -97,7 +97,10 @@ export class App {
           CDDEPOT = $(TextInput).only('#CODDEPOT').text;
           CDAFFAIRE = $(TextInput).only('#CODAFFAIRE').text;
           fs.writeFile(FICHIER, CDDEPOT + ';' + CDAFFAIRE + ';QTE', 'utf-8').catch(ex => console.error(ex));
-          $(CollectionView).only('#SCANLIST').itemCount = items.push({icoda: CDAFFAIRE, ilib: 'INITIALISE', iqte: CDDEPOT});
+          $(CollectionView).only('#SCANLIST').itemCount = items.push({
+            icoda: CDAFFAIRE,
+            ilib: $(Picker).only('#MODEFC').itemText($(Picker).only('#MODEFC').selectionIndex),
+            iqte: CDDEPOT});
           $(TextView).only('#INFOFIC').text = 'Fichier initialisé';
           $(Tab).only('#SCAN').visible = true;
           $(Button).only('#BINIT').enabled = false;
