@@ -268,10 +268,19 @@ export class App {
     const {button} = await dialog.onClose.promise();
     if (button === 'ok') {
       console.log(`L'utilisateur confirme`);
-      void fs.readFile(FICHIER, 'utf-8').then(data => {
-        const file = new File([data], CDDEPOT + CDAFFAIRE + '.csv', { type: 'text/csv' });
-        app.share({title: 'scan terminé', text: 'CODE DEPOT : ' + CDDEPOT + ' ; CODE AFFAIRE : ' + CDAFFAIRE, files: [file]}).catch(ex => console.error(ex));
-      }).catch(ex => console.error(ex));
+      if ($(Picker).only('#MODEFC').selectionIndex === 0) {
+        void fs.readFile(FICHIER, 'utf-8').then(data => {
+          const file = new File([data], CDDEPOT + CDAFFAIRE + '.csv', { type: 'text/csv' });
+          app.share({title: 'scan terminé', text: 'CODE DEPOT : ' + CDDEPOT + ' ; CODE AFFAIRE : ' + CDAFFAIRE, files: [file]}).catch(ex => console.error(ex));
+        }).catch(ex => console.error(ex));
+      }
+      else {
+        void fs.readFile(FICHIER, 'utf-8').then(data => {
+          const file = new File([data], 'INV_' + CDDEPOT + '.csv', { type: 'text/csv' });
+          app.share({title: 'scan terminé', text: 'Inventaire du CODE DEPOT : ' + CDDEPOT, files: [file]}).catch(ex => console.error(ex));
+        }).catch(ex => console.error(ex));
+      }
+      
     }
     else {
       console.log(`Annuler et revient à la saisie`);
