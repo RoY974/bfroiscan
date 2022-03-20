@@ -268,19 +268,42 @@ export class App {
     const {button} = await dialog.onClose.promise();
     if (button === 'ok') {
       console.log(`L'utilisateur confirme`);
-      if ($(Picker).only('#MODEFC').selectionIndex === 0) {
-        void fs.readFile(FICHIER, 'utf-8').then(data => {
-          const file = new File([data], CDDEPOT + CDAFFAIRE + '.csv', { type: 'text/csv' });
+      let exportitems : string;
+      //exportitems.shift();
+      void fs.readFile(FICHIER, 'utf-8').then(data => {
+
+        if ($(Picker).only('#MODEFC').selectionIndex === 0) {
+        
+          const ficluT = data.split('\n');
+          for (let i = 0; i < ficluT.length; i++) {
+            const ligT = ficluT[i].split(';');
+            if (ligT[0] !== 'CODE ART') {
+              if (ligT[0] !== '') {
+                exportitems = ligT[0] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
+              }
+            }
+          }
+          console.log(exportitems);
+          const file = new File([exportitems], CDDEPOT + CDAFFAIRE + '.csv', { type: 'text/csv' });
           app.share({title: 'scan terminé', text: 'CODE DEPOT : ' + CDDEPOT + ' ; CODE AFFAIRE : ' + CDAFFAIRE, files: [file]}).catch(ex => console.error(ex));
-        }).catch(ex => console.error(ex));
-      }
-      else {
-        void fs.readFile(FICHIER, 'utf-8').then(data => {
-          const file = new File([data], 'INV_' + CDDEPOT + '.csv', { type: 'text/csv' });
+        }
+        else {
+          
+          const ficluT = data.split('\n');
+          for (let i = 0; i < ficluT.length; i++) {
+            const ligT = ficluT[i].split(';');
+            if (ligT[0] !== 'CODE ART') {
+              if (ligT[0] !== '') {
+                exportitems = ligT[0] + ';' + ligT[1] + ';' + ligT[2] + '\n';
+              }
+            }
+          }
+          const file = new File([exportitems], 'INV_' + CDDEPOT + '.csv', { type: 'text/csv' });
           app.share({title: 'scan terminé', text: 'Inventaire du CODE DEPOT : ' + CDDEPOT, files: [file]}).catch(ex => console.error(ex));
-        }).catch(ex => console.error(ex));
-      }
+          
+        }
       
+      }).catch(ex => console.error(ex));
     }
     else {
       console.log(`Annuler et revient à la saisie`);
