@@ -140,6 +140,10 @@ export class App {
           }
         }
       }
+      $(TextInput).only('#CODDEPOT').text = items[0].iqte;
+      CDDEPOT = items[0].iqte;
+      $(TextInput).only('#CODAFFAIRE').text = items[0].icoda;
+      CDAFFAIRE = items[0].icoda;
       $(Tab).only('#SCAN').visible = true;
       $(Tab).only('#CONTENU').visible = true;
       $(Button).only('#BINIT').enabled = false;
