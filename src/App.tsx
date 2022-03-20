@@ -197,6 +197,7 @@ export class App {
     $(TextView).only('#DESART').text = "LIBELLE ARTICLE";
     $(Button).only('#ANNULER').enabled = false;
     $(TextInput).only('#COMPTE').text = "";
+    $(Tab).only('#SCAN').background = 'white';
   }
 
   private aladetection(e: MessageEvent) { //quand une étiquette est lu par la caméra
@@ -207,6 +208,7 @@ export class App {
       $(TextView).only('#DESART').text = decode[5];
       $(Button).only('#ANNULER').enabled = true;
       $(TextInput).only('#COMPTE').enabled = true;
+      $(Tab).only('#SCAN').background = 'lime';
     }
   }
 
