@@ -64,6 +64,12 @@ export class App {
     $(TextInput).only('#COMPTE').height = $(Button).only('#BOUSCAN').height;
     this.bscan.scaleMode = 'fill';
     this.bscan.on('detect', (e) => this.aladetection(e));
+
+    // Code qui gère si l'application est mis en arrière plan (touche home)
+    app.onBackground(async () => {
+      this.wipFic();
+      await app.onResume.promise();
+    });
   }
 
   private fileInit = () => {
@@ -312,7 +318,6 @@ export class App {
           app.share({title: 'scan terminé', text: 'Inventaire du CODE DEPOT : ' + CDDEPOT, files: [file]}).catch(ex => console.error(ex));
           
         }
-      
       }).catch(ex => console.error(ex));
     }
     else {
