@@ -288,7 +288,7 @@ export class App {
             const ligT = ficluT[i].split(';');
             if (ligT[0] !== 'CODE ART') {
               if (ligT[0] !== '') {
-                exportitems = ligT[0] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
+                exportitems = exportitems + ligT[0] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
               }
             }
           }
