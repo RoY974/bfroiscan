@@ -278,6 +278,7 @@ export class App {
     if (button === 'ok') {
       console.log(`L'utilisateur confirme`);
       let exportitems : string;
+      exportitems = "";
       //exportitems.shift();
       void fs.readFile(FICHIER, 'utf-8').then(data => {
 
@@ -288,7 +289,7 @@ export class App {
             const ligT = ficluT[i].split(';');
             if (ligT[0] !== 'CODE ART') {
               if (ligT[0] !== '') {
-                exportitems = exportitems + ligT[0] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
+                exportitems = exportitems + ligT[1] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
               }
             }
           }
