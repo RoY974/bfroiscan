@@ -125,6 +125,8 @@ export class App {
     $(CollectionView).only('#SCANLIST').itemCount = items.length;
     $(Button).only('#BINIT').enabled = true;
     $(Button).only('#RAZ').enabled = false;
+    $(TextInput).only('#CODDEPOT').text = "";
+    $(TextInput).only('#CODAFFAIRE').text = "";
     $(TextView).only('#INFOFIC').text = 'Réinitialisation terminé';
   }
 
