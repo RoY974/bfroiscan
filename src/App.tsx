@@ -293,11 +293,11 @@ export class App {
         if ($(Picker).only('#MODEFC').selectionIndex === 0) {
         
           const ficluT = data.split('\n');
-          for (let i = 0; i < ficluT.length; i++) {
+          for (let i = 1; i < ficluT.length; i++) {
             const ligT = ficluT[i].split(';');
             if (ligT[0] !== 'CODE ART') {
               if (ligT[0] !== '') {
-                exportitems = exportitems + ligT[1] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
+                exportitems = exportitems + ligT[0] + ';' + ligT[2] + ';' + CDAFFAIRE + '\n';
               }
             }
           }
@@ -312,7 +312,7 @@ export class App {
             const ligT = ficluT[i].split(';');
             if (ligT[0] !== 'CODE ART') {
               if (ligT[0] !== '') {
-                exportitems = ligT[0] + ';' + ligT[1] + ';' + ligT[2] + '\n';
+                exportitems = exportitems + ligT[0] + ';' + ligT[1] + ';' + ligT[2] + '\n';
               }
             }
           }
